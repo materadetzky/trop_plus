@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "108",
-          "date": "2026-10-03T20:39:02Z",
-          "localizedDescription": "feat(player): enhance video mode handling and refactor song row components",
-          "downloadURL": "https://github.com/686udjie/Trop/releases/download/nightly/Trop.ipa",
-          "size": 47313252,
+          "buildVersion": "2",
+          "date": "2026-10-07T15:39:23Z",
+          "localizedDescription": "Rename to Trop+ (com.tropplus.app)",
+          "downloadURL": "https://github.com/materadetzky/muza-fork34/releases/download/nightly/Trop.ipa",
+          "size": 47313497,
           "minOSVersion": "26.0"
         }
       ]
