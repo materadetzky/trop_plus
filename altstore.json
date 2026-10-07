@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "2",
-          "date": "2026-10-07T15:39:23Z",
-          "localizedDescription": "Rename to Trop+ (com.tropplus.app)",
-          "downloadURL": "https://github.com/materadetzky/muza-fork34/releases/download/nightly/Trop.ipa",
-          "size": 47313497,
+          "buildVersion": "3",
+          "date": "2026-10-07T15:50:10Z",
+          "localizedDescription": "Revise README for clarity and additional details",
+          "downloadURL": "https://github.com/materadetzky/trop_plus/releases/download/nightly/Trop.ipa",
+          "size": 47314535,
           "minOSVersion": "26.0"
         }
       ]
