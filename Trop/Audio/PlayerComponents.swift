@@ -85,11 +85,8 @@ struct PlaybackControlsRow: View {
         HStack(spacing: 0) {
             Button(action: onPrevious) {
                 Image(systemName: "backward.fill")
-                    .font(.title2)
+                    .font(.title)
                     .foregroundStyle(.white)
-                    .frame(width: 52, height: 52)
-                    .background(.ultraThinMaterial.opacity(0.6), in: Circle())
-                    .overlay(Circle().stroke(Color.white.opacity(0.16), lineWidth: 1))
             }
             .disabled(!hasPrevious)
             .opacity(hasPrevious ? 1 : 0.3)
@@ -101,11 +98,8 @@ struct PlaybackControlsRow: View {
 
             Button(action: onNext) {
                 Image(systemName: "forward.fill")
-                    .font(.title2)
+                    .font(.title)
                     .foregroundStyle(.white)
-                    .frame(width: 52, height: 52)
-                    .background(.ultraThinMaterial.opacity(0.6), in: Circle())
-                    .overlay(Circle().stroke(Color.white.opacity(0.16), lineWidth: 1))
             }
             .disabled(!hasNext)
             .opacity(hasNext ? 1 : 0.3)
