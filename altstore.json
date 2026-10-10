@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "5",
-          "date": "2026-10-10T06:54:52Z",
-          "localizedDescription": "Add Liquid Glass effect to full player and remove Settings from profile sheet",
+          "buildVersion": "6",
+          "date": "2026-10-10T07:07:09Z",
+          "localizedDescription": "Fix full player alignment and refine native Liquid Glass controls",
           "downloadURL": "https://github.com/materadetzky/trop_plus/releases/download/nightly/Trop.ipa",
-          "size": 47358199,
+          "size": 47354589,
           "minOSVersion": "26.0"
         }
       ]
