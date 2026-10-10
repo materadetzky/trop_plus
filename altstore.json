@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "7",
-          "date": "2026-10-10T07:21:33Z",
-          "localizedDescription": "Implement native Liquid Glass styling system and align player elements to 32pt grid",
+          "buildVersion": "8",
+          "date": "2026-10-10T07:35:25Z",
+          "localizedDescription": "Completely rewrite FullPlayerView with native Apple Music-style dynamic card layout, unified 28pt alignment grid, and authentic Liquid Glass system",
           "downloadURL": "https://github.com/materadetzky/trop_plus/releases/download/nightly/Trop.ipa",
-          "size": 47356763,
+          "size": 47357420,
           "minOSVersion": "26.0"
         }
       ]
