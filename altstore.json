@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "6",
-          "date": "2026-10-10T07:07:09Z",
-          "localizedDescription": "Fix full player alignment and refine native Liquid Glass controls",
+          "buildVersion": "7",
+          "date": "2026-10-10T07:21:33Z",
+          "localizedDescription": "Implement native Liquid Glass styling system and align player elements to 32pt grid",
           "downloadURL": "https://github.com/materadetzky/trop_plus/releases/download/nightly/Trop.ipa",
-          "size": 47354589,
+          "size": 47356763,
           "minOSVersion": "26.0"
         }
       ]
