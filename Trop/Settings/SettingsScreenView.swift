@@ -79,6 +79,21 @@ struct SettingsScreenView: View {
                                 }
                                 .pickerStyle(.menu)
                             }
+
+                            Divider()
+
+                            NavigationLink {
+                                AppearanceSettingsView()
+                            } label: {
+                                HStack {
+                                    Label("All Appearance Settings", systemImage: "paintpalette")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.tertiary)
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -137,6 +152,21 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.artworkSwipeNavigation) {
                                 Label("Swipe Artwork to Skip", systemImage: "hand.draw.fill")
                             }
+
+                            Divider()
+
+                            NavigationLink {
+                                PlayerSettingsView()
+                            } label: {
+                                HStack {
+                                    Label("All Playback & Queue Settings", systemImage: "play.circle")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.tertiary)
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -165,6 +195,21 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.autoDownloadOnLike) {
                                 Label("Auto-Download Liked Songs", systemImage: "heart.fill")
                             }
+
+                            Divider()
+
+                            NavigationLink {
+                                DownloadSettingsView()
+                            } label: {
+                                HStack {
+                                    Label("Storage Details & Offline Tracks", systemImage: "internaldrive")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.tertiary)
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -201,6 +246,21 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.trackSearchHistory) {
                                 Label("Keep Search History", systemImage: "magnifyingglass")
                             }
+
+                            Divider()
+
+                            NavigationLink {
+                                ContentSettingsView()
+                            } label: {
+                                HStack {
+                                    Label("Content, Region & Library Sync", systemImage: "globe")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.tertiary)
+                                }
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 

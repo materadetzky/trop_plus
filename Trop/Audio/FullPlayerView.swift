@@ -50,8 +50,11 @@ struct FullPlayerView: View {
                     Color.black
                         .ignoresSafeArea()
                 } else if settings.playerBackgroundStyle == .solid {
-                    Color.black
-                        .ignoresSafeArea()
+                    ZStack {
+                        Color.black
+                        Rectangle().fill(.ultraThinMaterial)
+                    }
+                    .ignoresSafeArea()
                 } else {
                     LinearGradient(
                         colors: [
@@ -66,10 +69,22 @@ struct FullPlayerView: View {
 
                     Circle()
                         .fill(np.dominantColors.first ?? .blue)
-                        .frame(width: 400, height: 400)
+                        .frame(width: 420, height: 420)
                         .blur(radius: 120)
-                        .opacity(0.45)
+                        .opacity(0.48)
                         .offset(y: -150)
+                        .ignoresSafeArea()
+
+                    Circle()
+                        .fill(np.dominantColors.last ?? .purple)
+                        .frame(width: 380, height: 380)
+                        .blur(radius: 110)
+                        .opacity(0.35)
+                        .offset(x: 100, y: 160)
+                        .ignoresSafeArea()
+
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
                         .ignoresSafeArea()
                 }
 
@@ -96,10 +111,14 @@ struct FullPlayerView: View {
 
                 VStack(spacing: 0) {
                     Capsule()
-                        .fill(.white.opacity(0.3))
-                        .frame(width: 36, height: 5)
-                        .padding(.top, 16)
-                        .padding(.bottom, 16)
+                        .fill(.white.opacity(0.35))
+                        .frame(width: 38, height: 5)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .overlay(Capsule().stroke(Color.white.opacity(0.18), lineWidth: 1))
+                        .padding(.top, 14)
+                        .padding(.bottom, 14)
                         .contentShape(Rectangle().size(width: 60, height: 30))
                         .onTapGesture {
                             guard showLyrics else { return }
@@ -153,6 +172,10 @@ struct FullPlayerView: View {
                                     }
                                 } label: {
                                     HStack(spacing: 8) {
+                                        Image(systemName: "quote.bubble.fill")
+                                            .font(.system(size: 11, weight: .semibold))
+                                            .foregroundStyle(.white.opacity(0.7))
+
                                         Text(activeLyricText)
                                             .font(.system(size: 14, weight: .medium))
                                             .lineLimit(1)
@@ -163,45 +186,61 @@ struct FullPlayerView: View {
                                             .font(.system(size: 10, weight: .semibold))
                                             .foregroundStyle(.white.opacity(0.55))
                                     }
-                                    .foregroundStyle(.white.opacity(0.82))
-                                    .contentShape(Rectangle())
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(
+                                        .ultraThinMaterial.opacity(0.65),
+                                        in: Capsule()
+                                    )
+                                    .overlay(
+                                        Capsule().stroke(Color.white.opacity(0.16), lineWidth: 1)
+                                    )
+                                    .foregroundStyle(.white.opacity(0.92))
+                                    .contentShape(Capsule())
                                 }
                                 .buttonStyle(.plain)
-                                .padding(.horizontal, 32)
-                                .padding(.bottom, 8)
+                                .padding(.horizontal, 24)
+                                .padding(.bottom, 6)
                                 .accessibilityLabel("Current lyric: \(activeLyricText). Open lyrics")
                             } else {
                                 Color.clear
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: 33, alignment: .bottom)
+                        .frame(height: 38, alignment: .bottom)
 
-                        progressSlider
-                            .padding(.top, 4)
-                            .padding(.bottom, 16)
+                        VStack(spacing: 12) {
+                            progressSlider
+                                .padding(.top, 4)
 
-                        Color.clear.frame(height: 8)
+                            PlaybackControlsRow(
+                                isPlaying: np.isPlaying,
+                                hasPrevious: np.hasPrevious,
+                                hasNext: np.hasNext,
+                                onPrevious: { np.playPrevious() },
+                                onPlayPause: { player.togglePlayPause() },
+                                onNext: { np.playNext() }
+                            )
+                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: np.isPlaying)
 
-                        PlaybackControlsRow(
-                            isPlaying: np.isPlaying,
-                            hasPrevious: np.hasPrevious,
-                            hasNext: np.hasNext,
-                            onPrevious: { np.playPrevious() },
-                            onPlayPause: { player.togglePlayPause() },
-                            onNext: { np.playNext() }
+                            SecondaryActionsRow(
+                                showQueue: $showQueue,
+                                isRepeatOn: $np.isRepeatOn
+                            )
+                            .padding(.bottom, 2)
+                        }
+                        .padding(.vertical, 16)
+                        .background(
+                            .ultraThinMaterial.opacity(0.68),
+                            in: RoundedRectangle(cornerRadius: 32, style: .continuous)
                         )
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: np.isPlaying)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 32, style: .continuous)
+                                .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 8)
+                        .padding(.horizontal, 20)
                         .padding(.bottom, 8)
-
-                        Color.clear.frame(height: 12)
-
-                        SecondaryActionsRow(
-                            showQueue: $showQueue,
-                            isRepeatOn: $np.isRepeatOn
-                        )
-
-                        Color.clear.frame(height: 8)
                     }
                 }
             }

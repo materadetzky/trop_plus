@@ -99,9 +99,7 @@ struct LibraryView: View {
                 }
             }
             .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showCreateDialog)
-            .accountSheets(state: accountState) {
-                router.libraryPath.append(DetailRoute.settings)
-            }
+            .accountSheets(state: accountState)
             .task {
                 await loadContent()
                 accountState.restoreSession()

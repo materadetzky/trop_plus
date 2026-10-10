@@ -57,11 +57,17 @@ struct PlayerPlayPauseButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                .font(.system(size: 42))
+                .font(.system(size: 34, weight: .bold))
                 .foregroundStyle(.white)
                 .contentTransition(.symbolEffect(.replace))
         }
-        .frame(width: 80, height: 80)
+        .frame(width: 76, height: 76)
+        .background(.ultraThinMaterial, in: Circle())
+        .overlay(
+            Circle()
+                .stroke(Color.white.opacity(0.28), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.16), radius: 12, x: 0, y: 6)
         .accessibilityLabel(isPlaying ? "Pause" : "Play")
     }
 }
@@ -79,8 +85,11 @@ struct PlaybackControlsRow: View {
         HStack(spacing: 0) {
             Button(action: onPrevious) {
                 Image(systemName: "backward.fill")
-                    .font(.title)
+                    .font(.title2)
                     .foregroundStyle(.white)
+                    .frame(width: 52, height: 52)
+                    .background(.ultraThinMaterial.opacity(0.6), in: Circle())
+                    .overlay(Circle().stroke(Color.white.opacity(0.16), lineWidth: 1))
             }
             .disabled(!hasPrevious)
             .opacity(hasPrevious ? 1 : 0.3)
@@ -92,8 +101,11 @@ struct PlaybackControlsRow: View {
 
             Button(action: onNext) {
                 Image(systemName: "forward.fill")
-                    .font(.title)
+                    .font(.title2)
                     .foregroundStyle(.white)
+                    .frame(width: 52, height: 52)
+                    .background(.ultraThinMaterial.opacity(0.6), in: Circle())
+                    .overlay(Circle().stroke(Color.white.opacity(0.16), lineWidth: 1))
             }
             .disabled(!hasNext)
             .opacity(hasNext ? 1 : 0.3)
