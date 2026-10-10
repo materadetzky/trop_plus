@@ -80,28 +80,29 @@ struct PlaybackControlsRow: View {
         HStack(spacing: 0) {
             Button(action: onPrevious) {
                 Image(systemName: "backward.fill")
-                    .font(.title)
+                    .font(.system(size: 26, weight: .semibold))
                     .foregroundStyle(.white)
+                    .frame(width: 50, height: 50)
             }
             .disabled(!hasPrevious)
-            .opacity(hasPrevious ? 1 : 0.3)
+            .opacity(hasPrevious ? 1 : 0.35)
             .frame(maxWidth: .infinity)
             .accessibilityLabel("Previous")
 
             PlayerPlayPauseButton(isPlaying: isPlaying, action: onPlayPause)
-            .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity)
 
             Button(action: onNext) {
                 Image(systemName: "forward.fill")
-                    .font(.title)
+                    .font(.system(size: 26, weight: .semibold))
                     .foregroundStyle(.white)
+                    .frame(width: 50, height: 50)
             }
             .disabled(!hasNext)
-            .opacity(hasNext ? 1 : 0.3)
+            .opacity(hasNext ? 1 : 0.35)
             .frame(maxWidth: .infinity)
             .accessibilityLabel("Next")
         }
-        .padding(.horizontal, 24)
     }
 }
 
@@ -144,7 +145,8 @@ struct SecondaryActionsRow: View {
     var body: some View {
         HStack(spacing: 0) {
             PlayerAirPlayControl()
-                .frame(maxWidth: .infinity)
+
+            Spacer()
 
             // Queue + Repeat stacked like Apple Music
             ZStack(alignment: .topTrailing) {
@@ -152,10 +154,10 @@ struct SecondaryActionsRow: View {
                     showQueue.toggle()
                 } label: {
                     Image(systemName: "list.bullet")
-                        .font(.title3)
+                        .font(.system(size: 18, weight: .medium))
                         .foregroundStyle(showQueue ? .white : .white.opacity(0.85))
                         .frame(width: 44, height: 44)
-                        .liquidGlassCircle(intensity: showQueue ? 1.2 : 0.75)
+                        .liquidGlassCircle(intensity: showQueue ? 1.25 : 0.8)
                 }
                 .accessibilityLabel("Queue")
 
@@ -172,9 +174,7 @@ struct SecondaryActionsRow: View {
                     .accessibilityLabel(isRepeatOn ? "Repeat one" : "Repeat all")
                 }
             }
-            .frame(maxWidth: .infinity)
         }
-        .padding(.vertical, 16)
     }
 }
 
@@ -182,10 +182,10 @@ struct PlayerAirPlayControl: View {
     var body: some View {
         Button {} label: {
             Image(systemName: "airplayaudio")
-                .font(.title3)
+                .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(.white.opacity(0.85))
                 .frame(width: 44, height: 44)
-                .liquidGlassCircle(intensity: 0.75)
+                .liquidGlassCircle(intensity: 0.8)
         }
         .overlay(AirPlayButton())
         .accessibilityLabel("AirPlay")

@@ -29,6 +29,8 @@ struct FullPlayerView: View {
     @State private var artworkEntryOffset: CGFloat = 0
     @State private var currentLyrics: [LyricLine] = []
 
+    private let horizontalGridPadding: CGFloat = 28
+
     private var activeLyricText: String? {
         let synchronizedLines = currentLyrics.filter {
             $0.startTime != nil &&
@@ -46,96 +48,13 @@ struct FullPlayerView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                if np.isVideoMode && np.hasVideo {
-                    Color.black
-                        .ignoresSafeArea()
-                } else if settings.playerBackgroundStyle == .solid {
-                    ZStack {
-                        Color.black
-                        Rectangle().fill(.ultraThinMaterial)
-                    }
-                    .ignoresSafeArea()
-                } else {
-                    LinearGradient(
-                        colors: [
-                            np.dominantColors.first ?? Color(red: 0.15, green: 0.15, blue: 0.2),
-                            np.dominantColors.last ?? Color(red: 0.05, green: 0.05, blue: 0.08)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .ignoresSafeArea()
-                    .animation(.easeInOut(duration: 0.8), value: np.dominantColors)
+                // Background Layer (Fluid animated colors + Liquid Glass frosted refraction)
+                playerBackground
 
-                    Circle()
-                        .fill(np.dominantColors.first ?? .blue)
-                        .frame(width: 420, height: 420)
-                        .blur(radius: 120)
-                        .opacity(0.48)
-                        .offset(y: -150)
-                        .ignoresSafeArea()
-
-                    Circle()
-                        .fill(np.dominantColors.last ?? .purple)
-                        .frame(width: 380, height: 380)
-                        .blur(radius: 110)
-                        .opacity(0.35)
-                        .offset(x: 100, y: 160)
-                        .ignoresSafeArea()
-
-                    Rectangle()
-                        .fill(.ultraThinMaterial)
-                        .ignoresSafeArea()
-
-                    // Prismatic glass sheen & specular top-light reflection
-                    LinearGradient(
-                        stops: [
-                            .init(color: .white.opacity(0.12), location: 0),
-                            .init(color: Color(red: 0.7, green: 0.85, blue: 1.0).opacity(0.06), location: 0.25),
-                            .init(color: Color(red: 1.0, green: 0.75, blue: 0.9).opacity(0.05), location: 0.5),
-                            .init(color: .clear, location: 0.8)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .ignoresSafeArea()
-                }
-
-                if !showLyrics && !showQueue && !np.isVideoMode {
-                    artwork
-                        .frame(maxWidth: .infinity)
-                        .frame(height: (geometry.size.height + geometry.safeAreaInsets.top) * 0.58)
-                        .compositingGroup()
-                        .clipped()
-                        .mask {
-                            LinearGradient(
-                                stops: [
-                                    .init(color: .white, location: 0),
-                                    .init(color: .white, location: 0.62),
-                                    .init(color: .clear, location: 1)
-                                ],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        }
-                        .offset(y: -geometry.safeAreaInsets.top)
-                        .frame(maxHeight: .infinity, alignment: .top)
-                }
-
+                // Main Foreground Content
                 VStack(spacing: 0) {
-                    Capsule()
-                        .fill(.white.opacity(0.40))
-                        .frame(width: 36, height: 5)
-                        .padding(.top, 12)
-                        .padding(.bottom, 12)
-                        .contentShape(Rectangle().size(width: 60, height: 30))
-                        .onTapGesture {
-                            guard showLyrics else { return }
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                showLyrics = false
-                            }
-                        }
-                        .accessibilityLabel(showLyrics ? "Close lyrics" : "Collapse player")
+                    // Top Drag Indicator
+                    topDragBar
 
                     if showLyrics {
                         LyricsView(
@@ -156,82 +75,7 @@ struct FullPlayerView: View {
                             progressSlider: { progressSlider }
                         )
                     } else {
-                        Color.clear.frame(height: 8)
-
-                        Color.clear
-                            .aspectRatio(1, contentMode: .fit)
-                            .padding(.horizontal, 32)
-                            .allowsHitTesting(false)
-
-                        Color.clear.frame(height: np.isVideoMode ? 12 : 16)
-
-                        titleAndActionsRow
-                            .padding(.top, 12)
-                            .padding(.horizontal, 32)
-                            .padding(.bottom, 8)
-
-                        Spacer(minLength: geometry.size.height * 0.03)
-
-                        Group {
-                            if let activeLyricText {
-                                Button {
-                                    withAnimation(.easeInOut(duration: 0.3)) {
-                                        showLyrics = true
-                                    }
-                                } label: {
-                                    HStack(spacing: 8) {
-                                        Image(systemName: "quote.bubble.fill")
-                                            .font(.system(size: 11, weight: .semibold))
-                                            .foregroundStyle(.white.opacity(0.85))
-
-                                        Text(activeLyricText)
-                                            .font(.system(size: 14, weight: .medium))
-                                            .lineLimit(1)
-                                            .truncationMode(.tail)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-
-                                        Image(systemName: "chevron.right")
-                                            .font(.system(size: 10, weight: .semibold))
-                                            .foregroundStyle(.white.opacity(0.65))
-                                    }
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .liquidGlassCapsule(intensity: 1.1)
-                                    .foregroundStyle(.white)
-                                    .contentShape(Capsule())
-                                }
-                                .buttonStyle(.plain)
-                                .padding(.horizontal, 32)
-                                .accessibilityLabel("Current lyric: \(activeLyricText). Open lyrics")
-                            } else {
-                                Color.clear
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 36, alignment: .bottom)
-                        .padding(.bottom, 12)
-
-                        progressSlider
-                            .padding(.top, 4)
-                            .padding(.bottom, 18)
-
-                        PlaybackControlsRow(
-                            isPlaying: np.isPlaying,
-                            hasPrevious: np.hasPrevious,
-                            hasNext: np.hasNext,
-                            onPrevious: { np.playPrevious() },
-                            onPlayPause: { player.togglePlayPause() },
-                            onNext: { np.playNext() }
-                        )
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: np.isPlaying)
-                        .padding(.bottom, 18)
-
-                        SecondaryActionsRow(
-                            showQueue: $showQueue,
-                            isRepeatOn: $np.isRepeatOn
-                        )
-
-                        Color.clear.frame(height: 10)
+                        mainPlayerContent(geometry: geometry)
                     }
                 }
             }
@@ -269,11 +113,267 @@ struct FullPlayerView: View {
         }
     }
 
+    // MARK: - Background
+    @ViewBuilder
+    private var playerBackground: some View {
+        if np.isVideoMode && np.hasVideo {
+            Color.black.ignoresSafeArea()
+        } else if settings.playerBackgroundStyle == .solid {
+            ZStack {
+                Color.black
+                Rectangle().fill(.ultraThinMaterial)
+            }
+            .ignoresSafeArea()
+        } else {
+            ZStack {
+                // Dynamic dominant color backdrop
+                LinearGradient(
+                    colors: [
+                        np.dominantColors.first ?? Color(red: 0.15, green: 0.15, blue: 0.22),
+                        np.dominantColors.last ?? Color(red: 0.06, green: 0.06, blue: 0.10)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+
+                Circle()
+                    .fill(np.dominantColors.first ?? .blue)
+                    .frame(width: 440, height: 440)
+                    .blur(radius: 120)
+                    .opacity(0.50)
+                    .offset(y: -140)
+
+                Circle()
+                    .fill(np.dominantColors.last ?? .purple)
+                    .frame(width: 400, height: 400)
+                    .blur(radius: 110)
+                    .opacity(0.40)
+                    .offset(x: 100, y: 150)
+
+                // Frosted glass refraction
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+
+                // Native Liquid Glass iridescent caustics & specular gloss sheen
+                LinearGradient(
+                    stops: [
+                        .init(color: .white.opacity(0.16), location: 0),
+                        .init(color: Color(red: 0.65, green: 0.85, blue: 1.0).opacity(0.08), location: 0.28),
+                        .init(color: Color(red: 1.0, green: 0.70, blue: 0.90).opacity(0.06), location: 0.55),
+                        .init(color: .clear, location: 0.82)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
+            .ignoresSafeArea()
+            .animation(.easeInOut(duration: 0.8), value: np.dominantColors)
+        }
+    }
+
+    // MARK: - Top Drag Indicator
+    private var topDragBar: some View {
+        Capsule()
+            .fill(.white.opacity(0.38))
+            .frame(width: 36, height: 5)
+            .padding(.top, 10)
+            .padding(.bottom, 8)
+            .contentShape(Rectangle().size(width: 80, height: 32))
+            .onTapGesture {
+                if showLyrics {
+                    withAnimation(.easeInOut(duration: 0.3)) { showLyrics = false }
+                }
+            }
+            .accessibilityLabel(showLyrics ? "Close lyrics" : "Collapse player")
+    }
+
+    // MARK: - Main Player Content
+    @ViewBuilder
+    private func mainPlayerContent(geometry: GeometryProxy) -> some View {
+        let screenWidth = geometry.size.width
+        let screenHeight = geometry.size.height
+        // Artwork size dynamically calculated so everything fits gracefully on any iPhone
+        let artworkSide = min(screenWidth - (horizontalGridPadding * 2), screenHeight * 0.38)
+
+        VStack(spacing: 0) {
+            Spacer(minLength: 6).frame(maxHeight: 14)
+
+            // 1. Artwork Floating Card
+            artworkContainer(size: artworkSide)
+
+            Spacer(minLength: 16)
+
+            // 2. Track Title, Artist, Like & Options
+            titleAndActionsRow
+                .padding(.horizontal, horizontalGridPadding)
+                .padding(.bottom, 12)
+
+            // 3. Lyrics Pill (if available)
+            lyricsPreviewPill
+                .padding(.horizontal, horizontalGridPadding)
+                .padding(.bottom, 14)
+
+            // 4. Progress Scrubber
+            progressSlider
+                .padding(.horizontal, horizontalGridPadding)
+                .padding(.bottom, 18)
+
+            // 5. Playback Transport Controls
+            PlaybackControlsRow(
+                isPlaying: np.isPlaying,
+                hasPrevious: np.hasPrevious,
+                hasNext: np.hasNext,
+                onPrevious: { np.playPrevious() },
+                onPlayPause: { player.togglePlayPause() },
+                onNext: { np.playNext() }
+            )
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: np.isPlaying)
+            .padding(.horizontal, horizontalGridPadding)
+            .padding(.bottom, 22)
+
+            // 6. Secondary Actions (AirPlay & Queue)
+            SecondaryActionsRow(
+                showQueue: $showQueue,
+                isRepeatOn: $np.isRepeatOn
+            )
+            .padding(.horizontal, horizontalGridPadding)
+
+            Spacer(minLength: 10).frame(maxHeight: 28)
+        }
+    }
+
+    // MARK: - Artwork Card
+    private func artworkContainer(size: CGFloat) -> some View {
+        artwork
+            .frame(width: size, height: size)
+            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .stroke(
+                        LinearGradient(
+                            stops: [
+                                .init(color: .white.opacity(0.35), location: 0),
+                                .init(color: .white.opacity(0.08), location: 0.5),
+                                .init(color: .white.opacity(0.18), location: 1)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            }
+            .shadow(color: Color.black.opacity(0.35), radius: 24, x: 0, y: 12)
+            .scaleEffect(np.isPlaying ? 1.0 : 0.88)
+            .animation(.spring(response: 0.4, dampingFraction: 0.75), value: np.isPlaying)
+            .offset(x: artworkEntryOffset)
+            .gesture(artworkSwipe)
+    }
+
+    // MARK: - Lyrics Preview Pill
+    @ViewBuilder
+    private var lyricsPreviewPill: some View {
+        if let activeLyricText {
+            Button {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showLyrics = true
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "quote.bubble.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.90))
+
+                    Text(activeLyricText)
+                        .font(.system(size: 14, weight: .medium))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.white.opacity(0.70))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 9)
+                .liquidGlassCapsule(intensity: 1.15)
+                .foregroundStyle(.white)
+                .contentShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Current lyric: \(activeLyricText). Open lyrics")
+        } else {
+            Color.clear.frame(height: 10)
+        }
+    }
+
+    // MARK: - Title and Actions Row
+    private var titleAndActionsRow: some View {
+        HStack(alignment: .center, spacing: 14) {
+            PlayerTitleBlock(
+                title: np.title,
+                artist: np.displayArtist,
+                spacing: 3,
+                titleFont: .title2.weight(.bold),
+                titleHeight: 28
+            )
+
+            HStack(spacing: 12) {
+                PlayerLikeButton(isLiked: isLiked) {
+                    guard let song = np.queueSongs.indices.contains(np.queueIndex) ? np.queueSongs[np.queueIndex] : nil else { return }
+                    Task { await likeStore.toggle(song: song) }
+                }
+
+                if np.queueSongs.indices.contains(np.queueIndex) {
+                    PlayerOptionsButton {
+                        showSongMenu = true
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Progress Scrubber
+    private var progressSlider: some View {
+        VStack(spacing: 6) {
+            ProgressBar(
+                progress: Binding(
+                    get: { isEditingSlider ? editingProgress : np.progress },
+                    set: { editingProgress = $0 }
+                ),
+                accentColor: np.dominantColors.first ?? .white,
+                isPlaying: np.isPlaying,
+                onEditingChanged: { editing in
+                    if editing {
+                        editingProgress = np.progress
+                    } else {
+                        let target = TimeInterval(editingProgress) * np.duration
+                        player.seek(to: target)
+                        np.currentTime = target
+                        player.updateNowPlayingProgress()
+                    }
+                    isEditingSlider = editing
+                }
+            )
+
+            HStack {
+                Text(DurationFormat.playbackTime(isEditingSlider
+                    ? TimeInterval(editingProgress) * np.duration
+                    : np.currentTime))
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.white.opacity(0.65))
+
+                Spacer()
+
+                Text(DurationFormat.playbackTime(np.duration))
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.white.opacity(0.65))
+            }
+        }
+    }
+
     // MARK: - Gestures
 
     /// Swipe left/right on the artwork to skip tracks (toggleable in Settings).
-    /// Blocked at the queue's ends (no movement); on skip, the incoming
-    /// artwork slides in from the swipe direction.
     private var artworkSwipe: some Gesture {
         DragGesture(minimumDistance: 20)
             .onEnded { value in
@@ -296,7 +396,7 @@ struct FullPlayerView: View {
         }
     }
 
-    /// Swipe down anywhere to collapse. Vertical-dominant drags only.
+    /// Swipe down anywhere to collapse.
     private var collapseDrag: some Gesture {
         DragGesture(minimumDistance: 12)
             .onChanged { value in
@@ -313,7 +413,7 @@ struct FullPlayerView: View {
             }
     }
 
-    // MARK: - Player Content
+    // MARK: - Player Content & Preload
 
     private func preloadLyrics() {
         guard let id = np.videoId else { return }
@@ -331,33 +431,6 @@ struct FullPlayerView: View {
               !Task.isCancelled,
               np.videoId == videoId else { return }
         currentLyrics = lines
-    }
-
-    private var titleAndActionsRow: some View {
-        HStack(alignment: .center) {
-            PlayerTitleBlock(
-                title: np.title,
-                artist: np.displayArtist,
-                spacing: 4,
-                titleFont: .title3.weight(.bold),
-                titleHeight: 28
-            )
-
-            Spacer()
-
-            HStack(spacing: 12) {
-                PlayerLikeButton(isLiked: isLiked) {
-                    guard let song = np.queueSongs.indices.contains(np.queueIndex) ? np.queueSongs[np.queueIndex] : nil else { return }
-                    Task { await likeStore.toggle(song: song) }
-                }
-
-                if np.queueSongs.indices.contains(np.queueIndex) {
-                    PlayerOptionsButton {
-                        showSongMenu = true
-                    }
-                }
-            }
-        }
     }
 
     private var musicVideoContent: some View {
@@ -439,8 +512,6 @@ struct FullPlayerView: View {
                 }
             }
         }
-        .offset(x: artworkEntryOffset)
-        .gesture(artworkSwipe)
     }
 
     /// Song artwork (or placeholder), filling its container.
@@ -465,44 +536,4 @@ struct FullPlayerView: View {
             }
         }
     }
-
-    private var progressSlider: some View {
-        VStack(spacing: 6) {
-            ProgressBar(
-                progress: Binding(
-                    get: { isEditingSlider ? editingProgress : np.progress },
-                    set: { editingProgress = $0 }
-                ),
-                accentColor: np.dominantColors.first ?? .white,
-                isPlaying: np.isPlaying,
-                onEditingChanged: { editing in
-                    if editing {
-                        editingProgress = np.progress
-                    } else {
-                        let target = TimeInterval(editingProgress) * np.duration
-                        player.seek(to: target)
-                        np.currentTime = target
-                        player.updateNowPlayingProgress()
-                    }
-                    isEditingSlider = editing
-                }
-            )
-
-            HStack {
-                Text(DurationFormat.playbackTime(isEditingSlider
-                    ? TimeInterval(editingProgress) * np.duration
-                    : np.currentTime))
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.white.opacity(0.6))
-
-                Spacer()
-
-                Text(DurationFormat.playbackTime(np.duration))
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.white.opacity(0.6))
-            }
-        }
-        .padding(.horizontal, 32)
-    }
-
 }

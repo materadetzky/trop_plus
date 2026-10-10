@@ -31,6 +31,7 @@ struct PlayerTitleBlock: View {
                     .lineLimit(1)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
