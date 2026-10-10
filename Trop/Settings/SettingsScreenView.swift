@@ -349,15 +349,7 @@ struct SettingsScreenView: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            .ultraThinMaterial,
-            in: RoundedRectangle(cornerRadius: 20, style: .continuous)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
+        .liquidGlassCard(cornerRadius: 20, intensity: 1.0)
     }
 
     private func applyAccentPreset(_ preset: AccentPreset) {

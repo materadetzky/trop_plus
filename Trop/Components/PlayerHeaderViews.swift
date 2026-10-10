@@ -48,8 +48,7 @@ struct PlayerLikeButton: View {
                 .font(.system(size: fontSize, weight: .regular))
                 .foregroundStyle(isLiked ? activeColor : inactiveColor)
                 .frame(width: 38, height: 38)
-                .background(.ultraThinMaterial.opacity(0.65), in: Circle())
-                .overlay(Circle().stroke(Color.white.opacity(0.18), lineWidth: 1))
+                .liquidGlassCircle(intensity: 0.95)
         }
     }
 }
@@ -65,8 +64,7 @@ struct PlayerOptionsButton: View {
                 .font(.system(size: 20, weight: .black))
                 .foregroundStyle(color)
                 .frame(width: 38, height: 38)
-                .background(.ultraThinMaterial.opacity(0.65), in: Circle())
-                .overlay(Circle().stroke(Color.white.opacity(0.18), lineWidth: 1))
+                .liquidGlassCircle(intensity: 0.95)
         }
         .accessibilityLabel("Song options")
     }

@@ -61,13 +61,8 @@ struct PlayerPlayPauseButton: View {
                 .foregroundStyle(.white)
                 .contentTransition(.symbolEffect(.replace))
         }
-        .frame(width: 76, height: 76)
-        .background(.ultraThinMaterial, in: Circle())
-        .overlay(
-            Circle()
-                .stroke(Color.white.opacity(0.28), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.16), radius: 12, x: 0, y: 6)
+        .frame(width: 80, height: 80)
+        .liquidGlassCircle(intensity: 1.35)
         .accessibilityLabel(isPlaying ? "Pause" : "Play")
     }
 }
@@ -158,9 +153,9 @@ struct SecondaryActionsRow: View {
                 } label: {
                     Image(systemName: "list.bullet")
                         .font(.title3)
-                        .foregroundStyle(showQueue ? .white : .white.opacity(0.7))
-                        .padding(10)
-                        .background(showQueue ? Circle().fill(.white.opacity(0.15)) : Circle().fill(.clear))
+                        .foregroundStyle(showQueue ? .white : .white.opacity(0.85))
+                        .frame(width: 44, height: 44)
+                        .liquidGlassCircle(intensity: showQueue ? 1.2 : 0.75)
                 }
                 .accessibilityLabel("Queue")
 
@@ -188,8 +183,9 @@ struct PlayerAirPlayControl: View {
         Button {} label: {
             Image(systemName: "airplayaudio")
                 .font(.title3)
-                .foregroundStyle(.white.opacity(0.7))
-                .padding(10)
+                .foregroundStyle(.white.opacity(0.85))
+                .frame(width: 44, height: 44)
+                .liquidGlassCircle(intensity: 0.75)
         }
         .overlay(AirPlayButton())
         .accessibilityLabel("AirPlay")

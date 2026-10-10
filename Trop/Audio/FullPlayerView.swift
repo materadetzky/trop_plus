@@ -86,6 +86,19 @@ struct FullPlayerView: View {
                     Rectangle()
                         .fill(.ultraThinMaterial)
                         .ignoresSafeArea()
+
+                    // Prismatic glass sheen & specular top-light reflection
+                    LinearGradient(
+                        stops: [
+                            .init(color: .white.opacity(0.12), location: 0),
+                            .init(color: Color(red: 0.7, green: 0.85, blue: 1.0).opacity(0.06), location: 0.25),
+                            .init(color: Color(red: 1.0, green: 0.75, blue: 0.9).opacity(0.05), location: 0.5),
+                            .init(color: .clear, location: 0.8)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea()
                 }
 
                 if !showLyrics && !showQueue && !np.isVideoMode {
@@ -111,14 +124,10 @@ struct FullPlayerView: View {
 
                 VStack(spacing: 0) {
                     Capsule()
-                        .fill(.white.opacity(0.35))
-                        .frame(width: 38, height: 5)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(.ultraThinMaterial, in: Capsule())
-                        .overlay(Capsule().stroke(Color.white.opacity(0.18), lineWidth: 1))
-                        .padding(.top, 14)
-                        .padding(.bottom, 14)
+                        .fill(.white.opacity(0.40))
+                        .frame(width: 36, height: 5)
+                        .padding(.top, 12)
+                        .padding(.bottom, 12)
                         .contentShape(Rectangle().size(width: 60, height: 30))
                         .onTapGesture {
                             guard showLyrics else { return }
@@ -157,12 +166,11 @@ struct FullPlayerView: View {
                         Color.clear.frame(height: np.isVideoMode ? 12 : 16)
 
                         titleAndActionsRow
-                            .padding(.top, 20)
+                            .padding(.top, 12)
                             .padding(.horizontal, 32)
-                            .padding(.bottom, 16)
-                            .offset(y: 20)
+                            .padding(.bottom, 8)
 
-                        Spacer(minLength: geometry.size.height * 0.04)
+                        Spacer(minLength: geometry.size.height * 0.03)
 
                         Group {
                             if let activeLyricText {
@@ -174,7 +182,7 @@ struct FullPlayerView: View {
                                     HStack(spacing: 8) {
                                         Image(systemName: "quote.bubble.fill")
                                             .font(.system(size: 11, weight: .semibold))
-                                            .foregroundStyle(.white.opacity(0.75))
+                                            .foregroundStyle(.white.opacity(0.85))
 
                                         Text(activeLyricText)
                                             .font(.system(size: 14, weight: .medium))
@@ -184,31 +192,28 @@ struct FullPlayerView: View {
 
                                         Image(systemName: "chevron.right")
                                             .font(.system(size: 10, weight: .semibold))
-                                            .foregroundStyle(.white.opacity(0.55))
+                                            .foregroundStyle(.white.opacity(0.65))
                                     }
-                                    .padding(.horizontal, 14)
-                                    .padding(.vertical, 6)
-                                    .background(.ultraThinMaterial.opacity(0.65), in: Capsule())
-                                    .overlay(Capsule().stroke(Color.white.opacity(0.2), lineWidth: 1))
-                                    .foregroundStyle(.white.opacity(0.92))
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .liquidGlassCapsule(intensity: 1.1)
+                                    .foregroundStyle(.white)
                                     .contentShape(Capsule())
                                 }
                                 .buttonStyle(.plain)
                                 .padding(.horizontal, 32)
-                                .padding(.bottom, 8)
                                 .accessibilityLabel("Current lyric: \(activeLyricText). Open lyrics")
                             } else {
                                 Color.clear
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: 33, alignment: .bottom)
+                        .frame(height: 36, alignment: .bottom)
+                        .padding(.bottom, 12)
 
                         progressSlider
                             .padding(.top, 4)
-                            .padding(.bottom, 16)
-
-                        Color.clear.frame(height: 8)
+                            .padding(.bottom, 18)
 
                         PlaybackControlsRow(
                             isPlaying: np.isPlaying,
@@ -219,16 +224,14 @@ struct FullPlayerView: View {
                             onNext: { np.playNext() }
                         )
                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: np.isPlaying)
-                        .padding(.bottom, 8)
-
-                        Color.clear.frame(height: 12)
+                        .padding(.bottom, 18)
 
                         SecondaryActionsRow(
                             showQueue: $showQueue,
                             isRepeatOn: $np.isRepeatOn
                         )
 
-                        Color.clear.frame(height: 8)
+                        Color.clear.frame(height: 10)
                     }
                 }
             }
