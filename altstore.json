@@ -26,11 +26,11 @@
       "versions": [
         {
           "version": "0.0.1",
-          "buildVersion": "3",
-          "date": "2026-10-07T15:50:10Z",
-          "localizedDescription": "Revise README for clarity and additional details",
+          "buildVersion": "4",
+          "date": "2026-10-10T06:36:59Z",
+          "localizedDescription": "Add native Liquid Glass Settings tab with full controls",
           "downloadURL": "https://github.com/materadetzky/trop_plus/releases/download/nightly/Trop.ipa",
-          "size": 47314535,
+          "size": 47349719,
           "minOSVersion": "26.0"
         }
       ]
