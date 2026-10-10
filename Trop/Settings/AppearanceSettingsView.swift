@@ -73,6 +73,7 @@ struct AppearanceSettingsView: View {
                     Text("Library").tag(1)
                     Text("Explore").tag(2)
                     Text("Search").tag(3)
+                    Text("Settings").tag(4)
                 }
             } header: {
                 Text("General")

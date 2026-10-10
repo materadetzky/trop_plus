@@ -32,6 +32,10 @@ struct ContentView: View {
             Tab("Search", systemImage: "magnifyingglass", value: 3, role: .search) {
                 SearchView()
             }
+
+            Tab("Settings", systemImage: "gearshape.fill", value: 4) {
+                SettingsScreenView()
+            }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
             .tabViewBottomAccessory(isEnabled: nowPlaying.isBarPresented) {

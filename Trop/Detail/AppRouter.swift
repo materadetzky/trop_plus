@@ -19,6 +19,7 @@ final class AppRouter: ObservableObject {
     @Published var libraryPath = NavigationPath()
     @Published var explorePath = NavigationPath()
     @Published var searchPath = NavigationPath()
+    @Published var settingsPath = NavigationPath()
     @Published var selectedTabIndex = 0
 
     /// Last route opened from an overlay; ContentView listens to collapse the player.
@@ -31,6 +32,7 @@ final class AppRouter: ObservableObject {
         case 1: libraryPath.count
         case 2: explorePath.count
         case 3: searchPath.count
+        case 4: settingsPath.count
         default: homePath.count
         }
     }
@@ -41,6 +43,7 @@ final class AppRouter: ObservableObject {
         case 1: libraryPath.removeLast()
         case 2: explorePath.removeLast()
         case 3: searchPath.removeLast()
+        case 4: settingsPath.removeLast()
         default: homePath.removeLast()
         }
     }
@@ -54,6 +57,7 @@ final class AppRouter: ObservableObject {
         case 1: libraryPath.append(route)
         case 2: explorePath.append(route)
         case 3: searchPath.append(route)
+        case 4: settingsPath.append(route)
         default: homePath.append(route)
         }
         activeRoute = route
