@@ -159,6 +159,10 @@ struct HomeScreenView: View {
                     viewModel.isLoginSheetPresented = true
                 }
             },
+            onSettings: {
+                viewModel.isAccountSheetPresented = false
+                router.homePath.append(DetailRoute.settings)
+            },
             onSignOut: { viewModel.logout() }
         )
     }

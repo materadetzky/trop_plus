@@ -50,9 +50,11 @@ final class AccountSheetState {
     }
 }
 
-/// Attaches the login + account sheets and their wiring.
+/// Attaches the login + account sheets and their wiring. `onSettings` pushes
+/// the settings route on the caller's tab path.
 struct AccountSheetHost: ViewModifier {
     @Bindable var state: AccountSheetState
+    var onSettings: () -> Void
 
     func body(content: Content) -> some View {
         content
@@ -79,6 +81,10 @@ struct AccountSheetHost: ViewModifier {
                             state.isLoginSheetPresented = true
                         }
                     },
+                    onSettings: {
+                        state.isAccountSheetPresented = false
+                        onSettings()
+                    },
                     onSignOut: { state.signOut() }
                 )
             }
@@ -89,7 +95,7 @@ struct AccountSheetHost: ViewModifier {
 }
 
 extension View {
-    func accountSheets(state: AccountSheetState) -> some View {
-        modifier(AccountSheetHost(state: state))
+    func accountSheets(state: AccountSheetState, onSettings: @escaping () -> Void) -> some View {
+        modifier(AccountSheetHost(state: state, onSettings: onSettings))
     }
 }

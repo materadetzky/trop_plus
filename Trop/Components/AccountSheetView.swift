@@ -16,6 +16,7 @@ struct AccountSheetView: View {
     var accountImageUrl: String?
     var onDone: () -> Void
     var onLogin: () -> Void
+    var onSettings: () -> Void
     var onSignOut: () -> Void
 
     var body: some View {
@@ -53,6 +54,19 @@ struct AccountSheetView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 4)
+                }
+
+                Section {
+                    Button(action: onSettings) {
+                        HStack {
+                            Label("Settings", systemImage: "gearshape")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
                 }
             }
             .listStyle(.insetGrouped)

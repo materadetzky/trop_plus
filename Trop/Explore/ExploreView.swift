@@ -41,7 +41,9 @@ struct ExploreView: View {
                 }
             }
             .onAppear { viewModel.load() }
-            .accountSheets(state: accountState)
+            .accountSheets(state: accountState) {
+                router.explorePath.append(DetailRoute.settings)
+            }
             .task {
                 accountState.restoreSession()
                 await accountState.fetchAccountInfo()

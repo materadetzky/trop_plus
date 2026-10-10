@@ -79,21 +79,6 @@ struct SettingsScreenView: View {
                                 }
                                 .pickerStyle(.menu)
                             }
-
-                            Divider()
-
-                            NavigationLink {
-                                AppearanceSettingsView()
-                            } label: {
-                                HStack {
-                                    Label("All Appearance Settings", systemImage: "paintpalette")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                }
-                            }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -152,21 +137,6 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.artworkSwipeNavigation) {
                                 Label("Swipe Artwork to Skip", systemImage: "hand.draw.fill")
                             }
-
-                            Divider()
-
-                            NavigationLink {
-                                PlayerSettingsView()
-                            } label: {
-                                HStack {
-                                    Label("All Playback & Queue Settings", systemImage: "play.circle")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                }
-                            }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -195,21 +165,6 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.autoDownloadOnLike) {
                                 Label("Auto-Download Liked Songs", systemImage: "heart.fill")
                             }
-
-                            Divider()
-
-                            NavigationLink {
-                                DownloadSettingsView()
-                            } label: {
-                                HStack {
-                                    Label("Storage Details & Offline Tracks", systemImage: "internaldrive")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                }
-                            }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -246,21 +201,6 @@ struct SettingsScreenView: View {
                             Toggle(isOn: $settings.trackSearchHistory) {
                                 Label("Keep Search History", systemImage: "magnifyingglass")
                             }
-
-                            Divider()
-
-                            NavigationLink {
-                                ContentSettingsView()
-                            } label: {
-                                HStack {
-                                    Label("Content, Region & Library Sync", systemImage: "globe")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                }
-                            }
-                            .buttonStyle(.plain)
                         }
                     }
 
@@ -349,7 +289,15 @@ struct SettingsScreenView: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .liquidGlassCard(cornerRadius: 20, intensity: 1.0)
+        .background(
+            .ultraThinMaterial,
+            in: RoundedRectangle(cornerRadius: 20, style: .continuous)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 12, x: 0, y: 4)
     }
 
     private func applyAccentPreset(_ preset: AccentPreset) {

@@ -31,7 +31,6 @@ struct PlayerTitleBlock: View {
                     .lineLimit(1)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -48,8 +47,7 @@ struct PlayerLikeButton: View {
             Image(systemName: isLiked ? "heart.fill" : "heart")
                 .font(.system(size: fontSize, weight: .regular))
                 .foregroundStyle(isLiked ? activeColor : inactiveColor)
-                .frame(width: 38, height: 38)
-                .liquidGlassCircle(intensity: 0.95)
+                .frame(width: 36, height: 36)
         }
     }
 }
@@ -64,8 +62,7 @@ struct PlayerOptionsButton: View {
             Text("⋮")
                 .font(.system(size: 20, weight: .black))
                 .foregroundStyle(color)
-                .frame(width: 38, height: 38)
-                .liquidGlassCircle(intensity: 0.95)
+                .frame(width: 36, height: 36)
         }
         .accessibilityLabel("Song options")
     }
